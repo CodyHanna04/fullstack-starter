@@ -60,4 +60,14 @@ public class InventoryDAOTest {
     Inventory createdInventory = this.inventoryDAO.create(inventory);
     Assert.assertNotNull(createdInventory);
   }
+
+  @Test
+  public void delete() {
+    Inventory inventory = new Inventory();
+    inventory.setName(NAME);
+    inventory.setProductType(PRODUCT_TYPE);
+    inventory = this.mongoTemplate.save(inventory);
+    this.inventoryDAO.delete(inventory.getId());
+    Assert.assertTrue(this.mongoTemplate.findAll(Inventory.class).isEmpty());
+  }
 }
