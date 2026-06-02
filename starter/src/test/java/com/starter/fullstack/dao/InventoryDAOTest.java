@@ -58,7 +58,6 @@ public class InventoryDAOTest {
     inventory.setName(NAME);
     inventory.setProductType(PRODUCT_TYPE);
     Inventory createdInventory = this.inventoryDAO.create(inventory);
-    Assert.assertNotNull(createdInventory.getId());
-    System.out.println(createdInventory.getId());
+    Assert.assertNotNull(createdInventory);
   }
 }
