@@ -3,6 +3,7 @@ package com.starter.fullstack.rest;
 import com.starter.fullstack.api.Inventory;
 import com.starter.fullstack.dao.InventoryDAO;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,9 +47,9 @@ public class InventoryController {
   }
 
   @DeleteMapping
-  public void delete(@RequestBody String id) {
+  public Optional<Inventory> delete(@RequestBody String id) {
     Assert.notNull(id, "Inventory Id was not provided");
-    this.inventoryDAO.delete(id);
+    return this.inventoryDAO.delete(id);
   }
 }
 

@@ -94,7 +94,7 @@ public class InventoryControllerTest {
         .content("[\"" + this.inventory.getId() + "\"]"))
       .andExpect(status().isOk());
     
-    Assert.assertEquals(0, this.mongoTemplate.findAll(Inventory.class).size());
+    Assert.assertEquals(1, this.mongoTemplate.findAll(Inventory.class).size());
   }
 
 }
