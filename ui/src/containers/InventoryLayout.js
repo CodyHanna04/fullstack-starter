@@ -2,6 +2,7 @@ import * as inventoryDuck from '../ducks/inventory'
 import * as productDuck from '../ducks/products'
 import Checkbox from '@material-ui/core/Checkbox'
 import Grid from '@material-ui/core/Grid'
+import InventoryFormModal from '../components/Inventory/InventoryFormModal'
 import { makeStyles } from '@material-ui/core/styles'
 import { MeasurementUnits } from '../constants/units'
 import moment from 'moment'
@@ -48,13 +49,28 @@ const InventoryLayout = (props) => {
   const dispatch = useDispatch()
   const inventory = useSelector(state => state.inventory.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
+  const products = useSelector(state => state.products.all)
+  const saveInventory = (product) => { dispatch(inventoryDuck.saveInventory(product)) }
   useEffect(() => {
     if (!isFetched) {
       dispatch(inventoryDuck.findInventory())
       dispatch(productDuck.findProducts())
     }
   }, [dispatch, isFetched])
-
+  //Create modal state and toggle function
+  const [isCreateOpen, setCreateOpen] = React.useState(false)
+  const toggleCreate = () => {
+    setCreateOpen(true)
+  }
+  const toggleModals = (resetChecked) => {
+    setCreateOpen(false)
+    //setDeleteOpen(false)
+    //setEditOpen(false)
+    if (resetChecked) {
+      setChecked([])
+    }
+  }
+  const [checked, setChecked] = React.useState([])
   const normalizedInventory = normalizeInventory(inventory)
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
@@ -98,7 +114,12 @@ const InventoryLayout = (props) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <EnhancedTableToolbar numSelected={selected.length} title='Inventory'/>
+        <EnhancedTableToolbar numSelected={selected.length}
+          title='Inventory'
+          toggleCreate={toggleCreate}
+          //toggleDelete={toggleDelete}
+          //toggleEdit={toggleEdit}
+        />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
             <EnhancedTableHead
@@ -140,6 +161,15 @@ const InventoryLayout = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <InventoryFormModal
+          title='Create'
+          formName='inventoryCreate'
+          isDialogOpen={isCreateOpen}
+          handleDialog={toggleModals}
+          handleInventory={saveInventory}
+          initialValues={{}}
+          products={products}
+        />
       </Grid>
     </Grid>
   )
