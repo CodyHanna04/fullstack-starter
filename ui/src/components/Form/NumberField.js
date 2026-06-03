@@ -1,5 +1,5 @@
 import { getIn } from 'formik'
-import MuiNumber from '@material-ui/core/Input'
+import MuiTextField from '@material-ui/core/TextField'
 import React from 'react'
 
 const fieldToNumberField = ({
@@ -18,6 +18,7 @@ const fieldToNumberField = ({
   const fieldError = getIn(errors, field.name)
   const showError = dirty && !!fieldError
   return {
+    type: 'number',
     variant: variant,
     error: showError,
     helperText: showError ? fieldError : warning ?? helperText,
@@ -30,9 +31,9 @@ const fieldToNumberField = ({
 }
 
 export const NumberField = ({ children, ...props }) =>
-  <MuiNumber {...fieldToNumberField(props)}>
+  <MuiTextField {...fieldToNumberField(props)}>
     {children}
-  </MuiNumber>
+  </MuiTextField>
 
 export default NumberField
 

@@ -1,5 +1,5 @@
 import { getIn } from 'formik'
-import MuiDatePicker from '@material-ui/core/TextField'
+import MuiTextField from '@material-ui/core/TextField'
 import React from 'react'
 
 const fieldToDateField = ({
@@ -18,6 +18,8 @@ const fieldToDateField = ({
   const fieldError = getIn(errors, field.name)
   const showError = dirty && !!fieldError
   return {
+    type: 'date',
+    InputLabelProps: { shrink: true },
     variant: variant,
     error: showError,
     helperText: showError ? fieldError : warning ?? helperText,
@@ -30,9 +32,9 @@ const fieldToDateField = ({
 }
 
 export const DateField = ({ children, ...props }) =>
-  <MuiDatePicker {...fieldToDateField(props)}>
+  <MuiTextField {...fieldToDateField(props)}>
     {children}
-  </MuiDatePicker>
+  </MuiTextField>
 
 export default DateField
 

@@ -11,7 +11,6 @@ import NumberField from '../Form/NumberField'
 import React from 'react'
 import SelectField from '../Form/SelectField'
 import TextField from '../Form/TextField'
-import { useSelector } from 'react-redux'
 import { Field, Form, Formik } from 'formik'
 
 class InventoryFormModal extends React.Component {
@@ -33,8 +32,27 @@ class InventoryFormModal extends React.Component {
       >
         <Formik
           initialValues={initialValues}
-          onSubmit={values => {
-            handleInventory(values)
+          validate = {values => {
+            const errors = {}
+            // Make 'name', 'productType', 'unitOfMeasurement' required
+            if (!values.name) {
+              errors.name = 'Name is required'
+            }
+            if (!values.productType) {
+              errors.productType = 'Product Type is required'
+            }
+            if (!values.unitOfMeasurement) {
+              errors.unitOfMeasurement = 'Unit of Measurement is required'
+            }
+            return errors
+          }}
+          onSubmit={ values => {
+            const payload = {
+              ...values,
+              bestBeforeDate: values.bestBeforeDate ? new Date(values.bestBeforeDate + 'T12:00:00Z').toISOString() : null,
+              measurementUnit: values.unitOfMeasurement !== null ? values.unitOfMeasurement : null,
+            }
+            handleInventory(payload)
             handleDialog(true)
           }}>
           {helpers =>
@@ -60,7 +78,7 @@ class InventoryFormModal extends React.Component {
                       name='productType'
                       label='Product Type'
                       component={SelectField}
-                      options={products.map(product => ({ value: product.id, label: product.name }))}
+                      options={products.map(product => ({ value: product.name, label: product.name }))}
                     />
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
@@ -70,9 +88,9 @@ class InventoryFormModal extends React.Component {
                     />
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
-                      name='avgPrice'
+                      name='averagePrice'
                       label='Average Price'
-                      component={TextField}
+                      component={NumberField}
                     />
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
@@ -85,7 +103,10 @@ class InventoryFormModal extends React.Component {
                       name='unitOfMeasurement'
                       label='Unit of Measurement'
                       component={SelectField}
-                      options={MeasurementUnits.map(unit => ({ value: unit.name, label: unit.name }))}
+                      options={Object.entries(MeasurementUnits).map(
+                        ([key, value]) =>
+                          ({ value: key, label: value.name })
+                      )}
                     />
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}

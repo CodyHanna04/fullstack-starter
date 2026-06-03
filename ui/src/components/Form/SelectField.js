@@ -1,5 +1,6 @@
 import { getIn } from 'formik'
-import MuiSelect from '@material-ui/core/Select'
+import MuiItem from '@material-ui/core/MenuItem'
+import MuiTextField from '@material-ui/core/TextField'
 import React from 'react'
 
 const fieldToSelect = ({
@@ -30,10 +31,12 @@ const fieldToSelect = ({
   }
 }
 
-export const SelectField = ({ children, ...props }) =>
-  <MuiSelect {...fieldToSelect(props)}>
-    {children}
-  </MuiSelect>
+export const SelectField = ({ options, ...props }) =>
+  <MuiTextField select {...fieldToSelect(props)}>
+    {options.map(option =>
+      <MuiItem key={option.value} value={option.value}>{option.label}</MuiItem>
+    )}
+  </MuiTextField>
 
 export default SelectField
 
