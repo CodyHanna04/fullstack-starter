@@ -73,7 +73,7 @@ const InventoryLayout = (props) => {
     setDeleteOpen(false)
     //setEditOpen(false)
     if (resetChecked) {
-      setChecked([])
+      setSelected([])
     }
   }
   const [checked, setChecked] = React.useState([])
@@ -180,7 +180,7 @@ const InventoryLayout = (props) => {
           isDialogOpen={isDeleteOpen}
           handleDelete={removeInventory}
           handleDialog={toggleModals}
-          initialValues={checked.map(check => check.id)}
+          initialValues={selected}
         />
       </Grid>
     </Grid>
