@@ -11,6 +11,7 @@ const actions = {
 
 export let defaultState = {
   all: [],
+  fetched: false,
 }
 
 export const findInventory = createAction(actions.INVENTORY_GET_ALL, () =>

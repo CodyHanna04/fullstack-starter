@@ -67,7 +67,7 @@ public class InventoryDAOTest {
     inventory.setName(NAME);
     inventory.setProductType(PRODUCT_TYPE);
     inventory = this.mongoTemplate.save(inventory);
-    this.inventoryDAO.delete(inventory.getId());
+    this.inventoryDAO.deleteByIds(List.of(inventory.getId()));
     Assert.assertTrue(this.mongoTemplate.findAll(Inventory.class).isEmpty());
   }
 }
