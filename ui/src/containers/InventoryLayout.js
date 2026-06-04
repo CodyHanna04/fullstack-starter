@@ -53,6 +53,7 @@ const InventoryLayout = (props) => {
   const products = useSelector(state => state.products.all)
   const saveInventory = (product) => { dispatch(inventoryDuck.saveInventory(product)) }
   const removeInventory = (inventoryId) => { dispatch(inventoryDuck.removeInventory(inventoryId)) }
+  const updateInventory = (inventory) => { dispatch(inventoryDuck.updateInventory(inventory)) }
   useEffect(() => {
     if (!isFetched) {
       dispatch(inventoryDuck.findInventory())
@@ -62,16 +63,20 @@ const InventoryLayout = (props) => {
   //Create modal state and toggle function
   const [isCreateOpen, setCreateOpen] = React.useState(false)
   const [isDeleteOpen, setDeleteOpen] = React.useState(false)
+  const [isEditOpen, setEditOpen] = React.useState(false)
   const toggleCreate = () => {
     setCreateOpen(true)
   }
   const toggleDelete = () => {
     setDeleteOpen(true)
   }
+  const toggleEdit = () => {
+    setEditOpen(true)
+  }
   const toggleModals = (resetChecked) => {
     setCreateOpen(false)
     setDeleteOpen(false)
-    //setEditOpen(false)
+    setEditOpen(false)
     if (resetChecked) {
       setSelected([])
     }
@@ -124,7 +129,7 @@ const InventoryLayout = (props) => {
           title='Inventory'
           toggleCreate={toggleCreate}
           toggleDelete={toggleDelete}
-          //toggleEdit={toggleEdit}
+          toggleEdit={toggleEdit}
         />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
@@ -174,6 +179,24 @@ const InventoryLayout = (props) => {
           handleDialog={toggleModals}
           handleInventory={saveInventory}
           initialValues={{}}
+          products={products}
+        />
+        <InventoryFormModal
+          title='Edit'
+          formName='inventoryEdit'
+          isDialogOpen={isEditOpen}
+          handleDialog={toggleModals}
+          handleInventory={updateInventory}
+          initialValues={(() => {
+            const item = inventory.find(item => item.id === selected[0])
+            if (!item) {
+              return {}
+            }
+            return {
+              ...item,
+              bestBeforeDate: item.bestBeforeDate ? moment(item.bestBeforeDate).format('YYYY-MM-DD') : ''
+            }
+          })()}
           products={products}
         />
         <InventoryDeleteModal

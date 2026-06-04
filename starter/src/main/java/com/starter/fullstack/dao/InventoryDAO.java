@@ -64,7 +64,11 @@ public class InventoryDAO {
    * @return Found Inventory.
    */
   public Optional<Inventory> retrieve(String id) {
-    // TODO
+    Query query = new Query(Criteria.where("id").in(id));
+    Inventory inventory = this.mongoTemplate.findOne(query, Inventory.class);
+    if (inventory != null) {
+      return Optional.of(inventory);
+    }
     return Optional.empty();
   }
 
@@ -75,7 +79,12 @@ public class InventoryDAO {
    * @return Updated Inventory.
    */
   public Optional<Inventory> update(String id, Inventory inventory) {
-    // TODO
+    Inventory found = this.mongoTemplate.findById(id, Inventory.class);
+    if (found != null) {
+      inventory.setId(id);
+      this.mongoTemplate.save(inventory);
+      return Optional.of(inventory);
+    }
     return Optional.empty();
   }
 
