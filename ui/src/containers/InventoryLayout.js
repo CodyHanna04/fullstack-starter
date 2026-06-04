@@ -178,7 +178,7 @@ const InventoryLayout = (props) => {
           isDialogOpen={isCreateOpen}
           handleDialog={toggleModals}
           handleInventory={saveInventory}
-          initialValues={{}}
+          initialValues={{name: '', productType: '', description: '', averagePrice: 0, amount: 0, unitOfMeasurement: '', bestBeforeDate: moment().format('YYYY-MM-DD'), neverExpires: false}}
           products={products}
         />
         <InventoryFormModal
