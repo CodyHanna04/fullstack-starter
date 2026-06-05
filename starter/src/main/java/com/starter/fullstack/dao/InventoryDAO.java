@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
 
 /**
@@ -51,8 +53,9 @@ public class InventoryDAO {
    * @return Created/Updated Inventory.
    */
   public Inventory create(Inventory inventory) {
-    // TODO
-    return null;
+    inventory.setId(null);
+    this.mongoTemplate.insert(inventory);
+    return inventory;
   }
 
   /**
@@ -61,7 +64,11 @@ public class InventoryDAO {
    * @return Found Inventory.
    */
   public Optional<Inventory> retrieve(String id) {
-    // TODO
+    Query query = new Query(Criteria.where("id").is(id));
+    Inventory inventory = this.mongoTemplate.findOne(query, Inventory.class);
+    if (inventory != null) {
+      return Optional.of(inventory);
+    }
     return Optional.empty();
   }
 
@@ -72,17 +79,19 @@ public class InventoryDAO {
    * @return Updated Inventory.
    */
   public Optional<Inventory> update(String id, Inventory inventory) {
-    // TODO
-    return Optional.empty();
+    inventory.setId(id);
+    Query query = new Query(Criteria.where("id").is(id));
+    Inventory result = this.mongoTemplate.findAndReplace(query, inventory);
+    return Optional.ofNullable(result);
   }
 
   /**
    * Delete Inventory By Id.
-   * @param id Id of Inventory.
+   * @param ids Id of Inventory.
    * @return Deleted Inventory.
    */
-  public Optional<Inventory> delete(String id) {
-    // TODO
-    return Optional.empty();
+  public List<Inventory> deleteByIds(List<String> ids) {
+    Query query = new Query(Criteria.where("id").in(ids));
+    return this.mongoTemplate.findAllAndRemove(query, Inventory.class);
   }
 }

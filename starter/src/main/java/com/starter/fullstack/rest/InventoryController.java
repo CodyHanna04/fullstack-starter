@@ -3,10 +3,19 @@ package com.starter.fullstack.rest;
 import com.starter.fullstack.api.Inventory;
 import com.starter.fullstack.dao.InventoryDAO;
 import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
 
 /**
  * Inventory Controller.
@@ -26,12 +35,29 @@ public class InventoryController {
   }
 
   /**
-   * Find Products.
-   * @return List of Product.
+   * Find Inventory Items.
+   * @return List of Items.
    */
   @GetMapping
   public List<Inventory> findInventories() {
     return this.inventoryDAO.findAll();
+  }
+
+  @PostMapping
+  public Inventory create(@Valid @RequestBody Inventory inventory) {
+    return this.inventoryDAO.create(inventory);
+  }
+
+  @PutMapping("/{id}")
+  public Optional<Inventory> update(@PathVariable String id, @Valid @RequestBody Inventory inventory) {
+    Assert.notNull(id, "Inventory Id was not provided");
+    return this.inventoryDAO.update(id, inventory);
+  }
+
+  @DeleteMapping
+  public List<Inventory> delete(@RequestBody List<String> ids) {
+    Assert.notEmpty(ids, "Inventory Id was not provided");
+    return this.inventoryDAO.deleteByIds(ids);
   }
 }
 

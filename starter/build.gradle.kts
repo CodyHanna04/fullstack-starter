@@ -26,7 +26,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.testcontainers:mongodb:1.17.3")
+    testImplementation("org.testcontainers:mongodb:1.21.4")
     compileOnly("org.projectlombok:lombok:1.18.24")
     compileOnly("org.apache.maven.plugins:maven-surefire-plugin:2.22.2")
 }
