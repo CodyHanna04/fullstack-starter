@@ -20,7 +20,7 @@ export const updateInventory = createAction(actions.INVENTORY_UPDATE, (inventory
     .put(`${config.restAPIUrl}/inventory/${inventory.id}`, inventory)
     .then((suc) => {
       const invs = getState().inventory.all.map(inv =>
-        inv.id === suc.data.id ? suc.data : inv
+        inv.id === inventory.id ? inventory : inv
       )
       dispatch(refreshInventory(invs))
     })
